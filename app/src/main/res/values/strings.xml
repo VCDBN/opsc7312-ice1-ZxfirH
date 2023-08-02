@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">MultiMediaApp</string>
+    <string name="fragment_two">Fragment Two</string>
+    <string name="get">GET</string>
+    <string name="news_1">News 1</string>
+    <string name="news_2">News 2</string>
+    <string name="change_text">Change Text</string>
 </resources>
