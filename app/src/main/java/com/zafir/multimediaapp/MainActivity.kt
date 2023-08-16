@@ -5,26 +5,33 @@ import android.os.Bundle
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
-import androidx.fragment.app.FragmentActivity
+import androidx.appcompat.app.AppCompatActivity
 import com.zafir.multimediaapp.Weather.RetrofitFactory
+import com.zafir.multimediaapp.Currency.Retrofit
+import com.zafir.multimediaapp.Fragment.NewsFragment
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import retrofit2.*
 
-//const val BASE_URL = "http://dataservice.accuweather.com/"
 var message = ""
-class MainActivity : FragmentActivity(), NewsSwitcherFragment.ToolbarListener {
-    //private val BASE_URL = "http://dataservice.accuweather.com/"
+class MainActivity : AppCompatActivity(){
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        getWeather()
+        getCurrency()
+        if (savedInstanceState == null) {
+            supportFragmentManager.beginTransaction()
+                .add(R.id.fragmentContainer, NewsFragment())
+                .commit()
+        }
 
         val getBT = findViewById<Button>(R.id.getDataBT)
 
         getBT.setOnClickListener {
-            getWeather()
+
             getFirstNews()
             getSecondNews()
             if(message.isNotEmpty()){
@@ -34,12 +41,32 @@ class MainActivity : FragmentActivity(), NewsSwitcherFragment.ToolbarListener {
 
     }
 
-    override fun onButtonClick(position: Int, text: String) {
-        val textFragment = supportFragmentManager.findFragmentById(
-            R.id.fragmentContainerView2) as NewsDisplayFragment
+    @SuppressLint("SetTextI18n")
+    private fun getCurrency() {
+        val curr = findViewById<TextView>(R.id.currencyTV)
 
-        textFragment.changeTextProperties(position, text)
+        val services = Retrofit.createRetrofitService()
+        CoroutineScope(Dispatchers.IO).launch {
+            val response = services.getCurrency()
+            withContext(Dispatchers.Main) {
+                try {
+                    if (response.isSuccessful) {
+                        val currencyResponse = response.body()
+                        currencyResponse?.let{
+                            curr.text = "${it.old_currency} : ${it.old_amount}\n${it.new_currency} : ${it.new_amount}"
+                        }
+                    } else {
+                        message = "Error: ${response.code()}"
+                    }
+                } catch (e: HttpException) {
+                    message = "Exception ${e.message}"
+                } catch (e: Throwable) {
+                    message = "Ooops: Something else went wrong"
+                }
+            }
+        }
     }
+
 
     private fun getSecondNews() {
 

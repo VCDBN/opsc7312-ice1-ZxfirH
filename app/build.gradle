@@ -7,6 +7,12 @@ android {
     namespace 'com.zafir.multimediaapp'
     compileSdk 33
 
+    viewBinding {
+        enabled = true
+    }
+    buildFeatures {
+        dataBinding true
+    }
     defaultConfig {
         applicationId "com.zafir.multimediaapp"
         minSdk 33
@@ -30,6 +36,7 @@ android {
     kotlinOptions {
         jvmTarget = '1.8'
     }
+
 }
 
 dependencies {
@@ -49,5 +56,12 @@ dependencies {
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4'
     implementation 'com.squareup.retrofit2:retrofit:2.9.0'
     implementation 'com.squareup.retrofit2:converter-moshi:2.6.0'
+
+    //val fragment_version = "1.5.7"
+    // Java language implementation
+    //noinspection GradleDependency
+    implementation 'androidx.fragment:fragment:1.5.7'
+    // Kotlin
+    implementation 'androidx.fragment:fragment-ktx:1.6.1'
 
 }
