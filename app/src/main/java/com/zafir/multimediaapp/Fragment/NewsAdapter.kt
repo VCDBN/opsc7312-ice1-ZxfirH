@@ -6,10 +6,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.zafir.multimediaapp.News.Article
 import com.zafir.multimediaapp.News.NewsData
 import com.zafir.multimediaapp.R
 
-class NewsAdapter(private val dogBreeds: List<NewsData>) :
+class NewsAdapter(private val dogBreeds: List<Article>) :
     RecyclerView.Adapter<NewsAdapter.DogViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DogViewHolder {
@@ -26,9 +27,9 @@ class NewsAdapter(private val dogBreeds: List<NewsData>) :
 
     inner class DogViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         @SuppressLint("SetTextI18n")
-        fun bind(breed: NewsData) {
-            itemView.findViewById<TextView>(R.id.dogBreedTextView).text = breed.articles[0].title
-            itemView.findViewById<TextView>(R.id.descriptionTextView).text = breed.articles[0].description
+        fun bind(breed: Article) {
+            itemView.findViewById<TextView>(R.id.dogBreedTextView).text = breed.title
+            itemView.findViewById<TextView>(R.id.descriptionTextView).text = breed.description + "\r\n\n"
         }
     }
 

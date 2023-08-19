@@ -46,7 +46,7 @@ class NewsFragment : Fragment() {
                     if (response.isSuccessful) {
                         val newsResponse = response.body()
                         newsResponse?.let{
-                            val adapter = NewsAdapter(listOf(it))
+                            val adapter = NewsAdapter(it.articles)
                             binding.recyclerView.layoutManager = LinearLayoutManager(requireContext())
 
                             binding.recyclerView.adapter = adapter
