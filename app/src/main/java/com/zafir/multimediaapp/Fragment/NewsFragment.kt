@@ -35,9 +35,6 @@ class NewsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        //var dogBreeds = listOf("Labrador", "Poodle", "Bulldog", "Golden Retriever", "Iceland dog", "Havanese", "vizsla", "Karelian bear dog", "Keeshond", "Maltese")
-
-
         val service = Retro.createRetro()
         CoroutineScope(Dispatchers.IO).launch {
             val response = service.getNews()
@@ -46,10 +43,13 @@ class NewsFragment : Fragment() {
                     if (response.isSuccessful) {
                         val newsResponse = response.body()
                         newsResponse?.let{
+
                             val adapter = NewsAdapter(it.articles)
                             binding.recyclerView.layoutManager = LinearLayoutManager(requireContext())
 
                             binding.recyclerView.adapter = adapter
+                            //it.articles.clear()
+
                         }
                     } else {
                         message = "Error: ${response.code()}"
@@ -61,12 +61,5 @@ class NewsFragment : Fragment() {
                 }
             }
         }
-
-        //val adapter = NewsAdapter(dogBreeds)
-
-        // Set a LinearLayoutManager for the RecyclerView
-        //binding.recyclerView.layoutManager = LinearLayoutManager(requireContext())
-
-        //binding.recyclerView.adapter = adapter
     }
 }

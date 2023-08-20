@@ -23,13 +23,18 @@ class NewsAdapter(private val dogBreeds: List<Article>) :
 
     }
 
-    override fun getItemCount(): Int = dogBreeds.size
+    override fun getItemCount(): Int{
+        return dogBreeds.size
+    }
 
     inner class DogViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         @SuppressLint("SetTextI18n")
         fun bind(breed: Article) {
+            itemView.findViewById<TextView>(R.id.dogBreedTextView).text = ""
+            itemView.findViewById<TextView>(R.id.descriptionTextView).text = ""
             itemView.findViewById<TextView>(R.id.dogBreedTextView).text = breed.title
             itemView.findViewById<TextView>(R.id.descriptionTextView).text = breed.description + "\r\n\n"
+
         }
     }
 

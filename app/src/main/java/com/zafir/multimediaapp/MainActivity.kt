@@ -9,6 +9,8 @@ import androidx.appcompat.app.AppCompatActivity
 import com.zafir.multimediaapp.Weather.RetrofitFactory
 import com.zafir.multimediaapp.Currency.Retrofit
 import com.zafir.multimediaapp.Fragment.NewsFragment
+import com.zafir.multimediaapp.News.Article
+import com.zafir.multimediaapp.News.NewsData
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -16,27 +18,23 @@ import kotlinx.coroutines.withContext
 import retrofit2.*
 
 var message = ""
-class MainActivity : AppCompatActivity(){
+
+class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         getWeather()
         getCurrency()
-        if (savedInstanceState == null) {
-            supportFragmentManager.beginTransaction()
-                .add(R.id.fragmentContainer, NewsFragment())
-                .commit()
+
+        val firstNews = findViewById<Button>(R.id.firstNewsBT)
+        val secondNews = findViewById<Button>(R.id.secondNewsBT)
+
+        firstNews.setOnClickListener {
+            getFirstNews()
         }
 
-        val getBT = findViewById<Button>(R.id.getDataBT)
-
-        getBT.setOnClickListener {
-
-            getFirstNews()
+        secondNews.setOnClickListener {
             getSecondNews()
-            if(message.isNotEmpty()){
-                Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
-            }
         }
 
     }
@@ -52,8 +50,9 @@ class MainActivity : AppCompatActivity(){
                 try {
                     if (response.isSuccessful) {
                         val currencyResponse = response.body()
-                        currencyResponse?.let{
-                            curr.text = "${it.old_currency} : ${it.old_amount}\n${it.new_currency} : ${it.new_amount}"
+                        currencyResponse?.let {
+                            curr.text =
+                                "${it.old_currency} : ${it.old_amount}\n${it.new_currency} : ${it.new_amount}"
                         }
                     } else {
                         message = "Error: ${response.code()}"
@@ -67,14 +66,21 @@ class MainActivity : AppCompatActivity(){
         }
     }
 
+    private fun getFirstNews() {
+
+
+        supportFragmentManager.beginTransaction()
+            .add(R.id.fragmentContainer, NewsFragment())
+            .commit()
+
+
+
+    }
 
     private fun getSecondNews() {
 
     }
 
-    private fun getFirstNews() {
-
-    }
 
     @SuppressLint("SetTextI18n")
     private fun getWeather() {
@@ -90,7 +96,7 @@ class MainActivity : AppCompatActivity(){
                 try {
                     if (response.isSuccessful) {
                         val weatherResponse = response.body()?.get(0)
-                        weatherResponse?.let{
+                        weatherResponse?.let {
                             temp.text = it.Temperature.Metric.Value.toString() + " °C"
                             desc.text = it.WeatherText
                         }
