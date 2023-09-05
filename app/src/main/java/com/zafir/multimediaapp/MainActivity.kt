@@ -25,6 +25,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         getWeather()
         getCurrency()
+        //getFirstNews()
 
         val firstNews = findViewById<Button>(R.id.firstNewsBT)
         val secondNews = findViewById<Button>(R.id.secondNewsBT)
@@ -34,7 +35,11 @@ class MainActivity : AppCompatActivity() {
         }
 
         secondNews.setOnClickListener {
-            getSecondNews()
+            val fragmentToRemove = supportFragmentManager.findFragmentByTag("NewsFragmentTag")
+            fragmentToRemove?.let {
+                getSecondNews(it as NewsFragment)
+            }
+
         }
 
     }
@@ -67,17 +72,22 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun getFirstNews() {
-
-
         supportFragmentManager.beginTransaction()
-            .add(R.id.fragmentContainer, NewsFragment())
+            .add(R.id.fragmentContainer, NewsFragment(), "NewsFragmentTag")
             .commit()
-
-
-
     }
 
-    private fun getSecondNews() {
+    private fun getSecondNews(fragment: NewsFragment) {
+        supportFragmentManager.beginTransaction()
+            .remove(fragment)
+            .commit()
+
+//        val x = findViewById<TextView>(R.id.descriptionTextView)
+//        val y = findViewById<TextView>(R.id.titleTextView)
+//        x.text = ""
+//        y.text = ""
+
+
 
     }
 
@@ -86,8 +96,6 @@ class MainActivity : AppCompatActivity() {
     private fun getWeather() {
         val temp = findViewById<TextView>(R.id.tempTXT)
         val desc = findViewById<TextView>(R.id.descriptionTXT)
-        //val apiKey = "d4cLebhw8Kn1QuBWwEeQGgy06rJYTdGz"
-        //val locationKey = "305605" // This key represents the location for which you want weather data
 
         val service = RetrofitFactory.makeRetrofitService()
         CoroutineScope(Dispatchers.IO).launch {

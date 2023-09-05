@@ -1,13 +1,18 @@
 package com.zafir.multimediaapp.Fragment
 
+import android.content.ContentValues.TAG
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.zafir.multimediaapp.Fragment.NewsAdapter
+import com.zafir.multimediaapp.MainActivity
+import com.zafir.multimediaapp.News.Article
 import com.zafir.multimediaapp.News.NewsData
 import com.zafir.multimediaapp.News.Retro
 import com.zafir.multimediaapp.R
@@ -23,6 +28,7 @@ import retrofit2.HttpException
 class NewsFragment : Fragment() {
 
     private lateinit var binding: FragmentNewsBinding
+    private lateinit var dataList: NewsData
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -37,7 +43,9 @@ class NewsFragment : Fragment() {
 
         val service = Retro.createRetro()
         CoroutineScope(Dispatchers.IO).launch {
+
             val response = service.getNews()
+            //response.body()?.articles?.clear()
             withContext(Dispatchers.Main) {
                 try {
                     if (response.isSuccessful) {
@@ -46,9 +54,18 @@ class NewsFragment : Fragment() {
 
                             val adapter = NewsAdapter(it.articles)
                             binding.recyclerView.layoutManager = LinearLayoutManager(requireContext())
-
                             binding.recyclerView.adapter = adapter
-                            //it.articles.clear()
+//                            if (adapter == null){
+                                //it.articles.clear()
+//                            }
+//                            if (binding.recyclerView.adapter != null)
+//                            {
+//                                it.articles.clear()
+//                                Log.i(TAG, "adapter is null")
+//                            }
+//                            dataList.articles.clear()
+//                            binding.recyclerView.adapter = null
+                            Log.i(TAG, "Hello World")
 
                         }
                     } else {
@@ -60,6 +77,8 @@ class NewsFragment : Fragment() {
                     message = "Ooops: Something else went wrong"
                 }
             }
+
+            //response.body()?.articles?.clear()
         }
     }
 }
