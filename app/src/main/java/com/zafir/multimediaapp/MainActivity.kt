@@ -4,13 +4,10 @@ import android.annotation.SuppressLint
 import android.os.Bundle
 import android.widget.Button
 import android.widget.TextView
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.zafir.multimediaapp.Weather.RetrofitFactory
 import com.zafir.multimediaapp.Currency.Retrofit
 import com.zafir.multimediaapp.Fragment.NewsFragment
-import com.zafir.multimediaapp.News.Article
-import com.zafir.multimediaapp.News.NewsData
+import com.zafir.multimediaapp.Weather.RetrofitFactory
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -20,28 +17,32 @@ import retrofit2.*
 var message = ""
 
 class MainActivity : AppCompatActivity() {
+    //var choice: String = "getOtherNews"
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         getWeather()
         getCurrency()
-        //getFirstNews()
 
         val firstNews = findViewById<Button>(R.id.firstNewsBT)
         val secondNews = findViewById<Button>(R.id.secondNewsBT)
 
         firstNews.setOnClickListener {
+            //choice = "getNews"
+            //Choice("getNews")
+//            val newsInstance = NewsFragment()
+//            newsInstance.newsChoice = "getNews"
             getFirstNews()
         }
 
         secondNews.setOnClickListener {
+//            choice = "getOtherNews"
+            //Choice("getOtherNews")
             val fragmentToRemove = supportFragmentManager.findFragmentByTag("NewsFragmentTag")
             fragmentToRemove?.let {
                 getSecondNews(it as NewsFragment)
             }
-
         }
-
     }
 
     @SuppressLint("SetTextI18n")
@@ -72,8 +73,26 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun getFirstNews() {
+
+        supportFragmentManager.findFragmentByTag("NewsFragmentTag")?.let {
+            supportFragmentManager.beginTransaction()
+                .remove(it)
+                .commit()
+        }
+        supportFragmentManager.findFragmentByTag("OtherNewsFragmentTag")?.let {
+            supportFragmentManager.beginTransaction()
+                .remove(it)
+                .commit()
+        }
+
+        val bunda = Bundle()
+        bunda.putString("newsChoice", "apple")
+        val fragobj = NewsFragment()
+        fragobj.setArguments(bunda)
+
+
         supportFragmentManager.beginTransaction()
-            .add(R.id.fragmentContainer, NewsFragment(), "NewsFragmentTag")
+            .add(R.id.fragmentContainer, fragobj, "NewsFragmentTag")
             .commit()
     }
 
@@ -82,13 +101,14 @@ class MainActivity : AppCompatActivity() {
             .remove(fragment)
             .commit()
 
-//        val x = findViewById<TextView>(R.id.descriptionTextView)
-//        val y = findViewById<TextView>(R.id.titleTextView)
-//        x.text = ""
-//        y.text = ""
+        val bunda = Bundle()
+        bunda.putString("newsChoice", "tesla")
+        val fragobj = NewsFragment()
+        fragobj.setArguments(bunda)
 
-
-
+        supportFragmentManager.beginTransaction()
+            .add(R.id.fragmentContainer, fragobj, "OtherNewsFragmentTag")
+            .commit()
     }
 
 
