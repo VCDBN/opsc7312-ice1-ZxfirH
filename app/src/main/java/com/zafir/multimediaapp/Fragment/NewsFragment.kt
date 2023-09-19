@@ -49,10 +49,11 @@ class NewsFragment : Fragment() {
                             val adapter = NewsAdapter(it.articles)
                             binding.recyclerView.layoutManager = LinearLayoutManager(requireContext())
                             binding.recyclerView.adapter = adapter
-//                            Log.i(TAG, "Hello World")
+                            Log.i(TAG, "Hello World")
 
                         }
                     } else {
+                        Log.i(TAG, "Not Displaying")
                         message = "Error: ${response.code()}"
                     }
                 } catch (e: HttpException) {

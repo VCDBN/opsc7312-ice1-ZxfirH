@@ -12,6 +12,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MultiMediaApp"
         android:usesCleartextTraffic="true"
+        android:enableOnBackInvokedCallback="true"
         >
         <activity
             android:name=".MainActivity"

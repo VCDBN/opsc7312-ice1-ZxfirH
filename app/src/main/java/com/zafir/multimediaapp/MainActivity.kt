@@ -88,7 +88,7 @@ class MainActivity : AppCompatActivity() {
         val bunda = Bundle()
         bunda.putString("newsChoice", "apple")
         val fragobj = NewsFragment()
-        fragobj.setArguments(bunda)
+        fragobj.arguments = bunda
 
 
         supportFragmentManager.beginTransaction()
